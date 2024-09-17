@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="styles/styles.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <script defer src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+
+    <script defer src="script.js"></script>
+
+    <title>WeatherApp</title>
+
+</head>
+
+
+<body class="font-sans bg-gray-100 text-gray-800">
+    <header class="bg-green-600 text-white p-4 text-center overflow-hidden">
+        <h1 class="text-4xl font-bold ">WeatherApp</h1>
+    </header>
+    <main class="p-6 max-w-3xl mx-auto overflow-hidden">
+        <form id="searchForm" class="mb-6">
+            <label for="locationInput" class="block text-lg font-medium mb-2">Enter Location (address or
+                coordinates):</label>
+            <input type="text" id="locationInput" required
+                class="searchQuery border border-gray-300 rounded-md p-2 w-full mb-4">
+            <button type="submit" class="searchButton bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+                Search
+            </button>
+        </form>
+        <div id="map" class="h-80 mb-6"></div>
+
+        <div class="max-w-2xl mx-auto p-6">
+            <!-- Tab Contents -->
+            <div class="max-w-2xl mx-auto p-6">
+                <!-- Tabs -->
+                <div class="flex justify-center">
+                    <nav class="flex space-x-2 bg-gray-100 rounded-lg p-1 shadow-md">
+                        <button class="tab-btn active-tab py-2 px-6 rounded-lg text-gray-800 bg-white shadow-sm"
+                            data-target="tab-1">
+                            Current Weather
+                        </button>
+                        <button class="tab-btn py-2 px-6 rounded-lg text-gray-600" data-target="tab-2">
+                            Selected Regions
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Tab Contents -->
+                <div class="tab-content mt-6">
+                    <!-- First Tab: Current Weather -->
+                    <div id="tab-1" class="tab-panel">
+                        <h2 class="text-2xl font-semibold text-gray-800">Current Weather</h2>
+                        <div class="mt-4 space-y-4">
+                            <p class="flex items-center text-gray-600">
+                                <!-- Temperature Icon: Thermometer -->
+                                <svg class="w-6 h-6 text-red-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 2a5 5 0 00-5 5v6a5 5 0 1010 0V7a5 5 0 00-5-5zm-1 10h2m-2 4h2" />
+                                </svg>
+                                Temperature: <span id="temperature" class="ml-1">--</span>°C
+                            </p>
+                            <p class="flex items-center text-gray-600">
+                                <!-- Precipitation Icon: Rain Cloud -->
+                                <svg class="w-6 h-6 text-blue-400 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M20 17.58A5.022 5.022 0 0116 20H8a5.022 5.022 0 01-4-2.42M16 10a4 4 0 10-8 0c0 5.53-6 8-6 8h20s-6-2.47-6-8z" />
+                                </svg>
+                                Precipitation: <span id="precipitation" class="ml-1">--</span> mm
+                            </p>
+                            <p class="flex items-center text-gray-600">
+                                <!-- Wind Speed Icon: Wind -->
+                                <svg class="w-6 h-6 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 12h18M3 6h12m-6 6h6" />
+                                </svg>
+                                Wind Speed: <span id="wind_speed" class="ml-1">--</span> km/h
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Second Tab: Selected Regions -->
+                    <div id="tab-2" class="tab-panel hidden">
+                        <h2 class="text-2xl font-semibold text-gray-800">Selected Regions</h2>
+                        <ul id="selected-regions" class="mt-4 list-disc pl-5 text-gray-600">
+                            <!-- Dynamically added regions will go here -->
+                        </ul>
+                        <button id="add-region-btn"
+                            class="mt-4 flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600">
+                            <!-- Add Region Icon: Plus -->
+                            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4" />
+                            </svg>
+                            Add Region
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div>
+                <h3 class="text-lg font-bold mt-4">7-Day Forecast</h3>
+                <div id="forecast" class="grid grid-cols-2 gap-2 mt-2">
+                    <!-- Forecast cards will go here -->
+                </div>
+            </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center p-4 mt-4 overflow-hidden">
+        <p>Powered by Open-Meteo API & Leaflet.js | Developed by Alphax</p>
+    </footer>
+</body>
+
+</html>

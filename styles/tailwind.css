@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+/* Tailwind tabbed component */
+.tab-btn {
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.active-tab {
+    background-color: #ffffff;
+    color: #1f2937;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tab-btn:hover {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+
+.tab-btn:not(.active-tab) {
+    background-color: transparent;
+}
+
